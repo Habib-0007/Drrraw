@@ -1,4 +1,4 @@
-<!doctype html>
+<!--<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -46,5 +46,71 @@
 				</li>
 			</footer>
 		</main>
+	</body>
+</html> -->
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Simple Drawing App</title>
+		<style>
+			canvas {
+				border: 1px solid #000;
+				touch-action: none; /* Disable browser touch gestures to improve touch drawing */
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="drawingCanvas" width="500" height="500"></canvas>
+
+		<script>
+			const canvas = document.getElementById("drawingCanvas");
+			const ctx = canvas.getContext("2d");
+
+			let drawing = false;
+
+			// Event listeners for touch (or mouse) down and up
+			canvas.addEventListener("mousedown", startDrawing);
+			canvas.addEventListener("mouseup", stopDrawing);
+
+			canvas.addEventListener("touchstart", startDrawing);
+			canvas.addEventListener("touchend", stopDrawing);
+
+			// Event listener for touch (or mouse) move to draw
+			canvas.addEventListener("mousemove", draw);
+			canvas.addEventListener("touchmove", draw);
+
+			function startDrawing(e) {
+				drawing = true;
+				draw(e); // Draw initial point
+			}
+
+			function stopDrawing() {
+				drawing = false;
+				ctx.beginPath(); // Reset path when not drawing
+			}
+
+			function draw(e) {
+				if (!drawing) return;
+
+				// Get the coordinates based on whether it's a touch or mouse event
+				const x =
+					e.type === "mousemove"
+						? e.clientX - canvas.offsetLeft
+						: e.touches[0].clientX - canvas.offsetLeft;
+				const y =
+					e.type === "mousemove"
+						? e.clientY - canvas.offsetTop
+						: e.touches[0].clientY - canvas.offsetTop;
+
+				// Draw a small circle at the current position
+				ctx.beginPath();
+				ctx.arc(x, y, 5, 0, 2 * Math.PI);
+				ctx.fillStyle = "#000";
+				ctx.fill();
+				ctx.stroke();
+			}
+		</script>
 	</body>
 </html>
